@@ -1,35 +1,32 @@
 package com.projekt.vaadinpwa.views;
 
-import com.projekt.vaadinpwa.backend.service.S3ConnectionService;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @Route("")
+@PageTitle("Start | VaadinPWA")
 public class StartView extends VerticalLayout {
 
-    private S3ConnectionService s3ConnectionService;
+    public StartView() {
+        Button goToUploadButton = new Button("Dodaj plik");
+        goToUploadButton.addClickListener(e -> UI.getCurrent().navigate(UploadFileView.class));
+        goToUploadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-    public StartView(S3ConnectionService s3ConnectionService) {
-        this.s3ConnectionService = s3ConnectionService;
+        Button goToListFileButton = new Button("Zobacz pliki");
+        goToListFileButton.addClickListener(e -> UI.getCurrent().navigate(ListFileView.class));
+        goToListFileButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setAlignItems(Alignment.CENTER);
+        setSizeFull();
+        setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        setAlignItems(FlexComponent.Alignment.CENTER);
 
-        add(new H1("Dodaj plik"));
-        configureUploader();
-    }
-
-    private void configureUploader() {
-        MemoryBuffer buffer = new MemoryBuffer();
-        Upload upload = new Upload(buffer);
-        upload.addSucceededListener(event -> {
-            s3ConnectionService.uploadFile("", event.getFileName(), buffer.getInputStream(), event.getContentLength());
-            add(new H2("Plik" + event.getFileName() + " dodany pomyślnie"));
-        });
-        add(upload);
+        add(new H2("Wybierz chcesz zrobić"), new HorizontalLayout(goToUploadButton, goToListFileButton));
     }
 }

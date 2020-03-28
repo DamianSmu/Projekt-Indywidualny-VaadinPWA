@@ -1,6 +1,6 @@
 package com.projekt.vaadinpwa.backend.service;
 
-import com.projekt.vaadinpwa.backend.entity.User;
+import com.projekt.vaadinpwa.backend.entity.UserEntity;
 import com.projekt.vaadinpwa.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> findAll() {
+    public List<UserEntity> findAll() {
         return userRepository.findAll();
     }
 }

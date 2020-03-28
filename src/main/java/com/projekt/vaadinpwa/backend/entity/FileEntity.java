@@ -2,21 +2,19 @@ package com.projekt.vaadinpwa.backend.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class File extends AbstractEntity {
+public class FileEntity extends AbstractEntity {
 
     private String name;
     private String path;
-    private String url;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User owner;
+    private UserEntity owner;
 
-    public File() {
+    public FileEntity() {
     }
 
     public String getName() {
@@ -35,19 +33,11 @@ public class File extends AbstractEntity {
         this.path = path;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public User getOwner() {
+    public UserEntity getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(UserEntity owner) {
         this.owner = owner;
     }
 }

@@ -1,13 +1,13 @@
 package com.projekt.vaadinpwa.backend.service;
 
-import com.projekt.vaadinpwa.backend.entity.File;
-import com.projekt.vaadinpwa.backend.entity.User;
+import com.projekt.vaadinpwa.backend.entity.FileEntity;
+import com.projekt.vaadinpwa.backend.entity.UserEntity;
 import com.projekt.vaadinpwa.backend.repository.FileRepository;
 import com.projekt.vaadinpwa.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -15,60 +15,52 @@ public class FileService {
 
     private FileRepository fileRepository;
     private UserRepository userRepository;
+    private S3ConnectionService s3ConnectionService;
 
-    public FileService(FileRepository fileRepository, UserRepository userRepository) {
+    //TODO
+    private UserEntity testUser;
+
+    public FileService(FileRepository fileRepository, UserRepository userRepository, S3ConnectionService s3ConnectionService) {
         this.fileRepository = fileRepository;
         this.userRepository = userRepository;
+        this.s3ConnectionService = s3ConnectionService;
     }
 
-    public List<File> findAll() {
+    public List<FileEntity> findAll() {
         return fileRepository.findAll();
     }
 
     @PostConstruct
-    public void generateTestData()
-    {
-        if(fileRepository.count() == 0 && userRepository.count() == 0)
-        {
-            generateTestUsers();
-            generateTestFiles();
+    public void generateTestData() {
+        if (userRepository.count() == 0) {
+            generateTestUser();
         }
     }
 
-    public void generateTestUsers()
-    {
-        User userA = new User();
-        userA.setUserName("UserA");
-        userA.setEmail("usera@mail.com");
-        User userB = new User();
-        userB.setUserName("UserB");
-        userB.setEmail("userb@mail.com");
-        User userC = new User();
-        userC.setUserName("UserC");
-        userC.setEmail("userc@mail.com");
-        List<User> users = Arrays.asList(userA, userB, userC);
-        userRepository.saveAll(users);
+    public void generateTestUser() {
+        UserEntity user = new UserEntity();
+        user.setUserName("TestUser");
+        user.setEmail("testuser@gmail.com");
+        testUser = user;
+        userRepository.save(user);
     }
 
-    public void generateTestFiles()
-    {
-        List<User> users = userRepository.findAll();
-        File fileA = new File();
-        fileA.setOwner(users.get(0));
-        fileA.setName("fileA");
-        fileA.setPath("/");
-        fileA.setUrl("https://");
-        File fileB = new File();
-        fileB.setOwner(users.get(1));
-        fileB.setName("fileB");
-        fileB.setPath("/");
-        fileB.setUrl("https://");
-        File fileC = new File();
-        fileC.setOwner(users.get(2));
-        fileC.setName("fileC");
-        fileC.setPath("/");
-        fileC.setUrl("https://");
-        List<File> files = Arrays.asList(fileA, fileB, fileC);
-        fileRepository.saveAll(files);
+
+    public byte[] downloadFile(String path, String name) {
+        return s3ConnectionService.downloadFile(path, name);
+    }
+
+    public void uploadFile(String fileName, String path, InputStream inputStream, Long contentLength, UserEntity owner) {
+        try {
+            s3ConnectionService.uploadFile(fileName, path, inputStream, contentLength);
+        } catch (Exception e) {
+            return;
+        }
+        FileEntity file = new FileEntity();
+        file.setName(fileName);
+        file.setPath(path);
+        //TODO
+        file.setOwner(testUser);
+        fileRepository.save(file);
     }
 }

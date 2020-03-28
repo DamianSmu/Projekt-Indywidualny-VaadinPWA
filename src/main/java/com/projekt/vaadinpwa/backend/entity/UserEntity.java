@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-public class User extends AbstractEntity {
+public class UserEntity extends AbstractEntity {
 
     @NotNull
     @NotEmpty
@@ -22,10 +22,9 @@ public class User extends AbstractEntity {
     private String email = "";
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<File> files = new LinkedList<>();
+    private List<FileEntity> files = new LinkedList<>();
 
-    public User()
-    {
+    public UserEntity() {
     }
 
     public String getUserName() {
@@ -44,7 +43,7 @@ public class User extends AbstractEntity {
         this.email = email;
     }
 
-    public List<File> getFiles() {
+    public List<FileEntity> getFiles() {
         return files;
     }
 }
