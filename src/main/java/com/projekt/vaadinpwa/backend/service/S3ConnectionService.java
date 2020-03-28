@@ -1,8 +1,6 @@
 package com.projekt.vaadinpwa.backend.service;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -19,8 +17,6 @@ import java.io.InputStream;
 @Service
 public class S3ConnectionService {
 
-    private static final String accessKey = "AKIAIVSJQDBDI7UQMIOA";
-    private static final String privateKey = "MWW9osFrj5IljeWKiryBXIKe95MzcMd4fGL7oZMt";
     private static final String bucketName = "vaadin-pwa-files-bucket";
 
     private AmazonS3 s3client;
@@ -28,13 +24,11 @@ public class S3ConnectionService {
     public S3ConnectionService() {
         init();
     }
-
-
+    
     public void init() {
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey, privateKey);
         s3client = AmazonS3ClientBuilder
                 .standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withCredentials(new EnvironmentVariableCredentialsProvider())
                 .withRegion(Regions.EU_CENTRAL_1)
                 .build();
     }
