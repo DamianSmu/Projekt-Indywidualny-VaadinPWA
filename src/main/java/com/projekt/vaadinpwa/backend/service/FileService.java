@@ -15,15 +15,15 @@ public class FileService {
 
     private FileRepository fileRepository;
     private UserRepository userRepository;
-    private S3ConnectionService s3ConnectionService;
+    private DataSourceService DataSourceService;
 
     //TODO
     private UserEntity testUser;
 
-    public FileService(FileRepository fileRepository, UserRepository userRepository, S3ConnectionService s3ConnectionService) {
+    public FileService(FileRepository fileRepository, UserRepository userRepository, DataSourceService DataSourceService) {
         this.fileRepository = fileRepository;
         this.userRepository = userRepository;
-        this.s3ConnectionService = s3ConnectionService;
+        this.DataSourceService = DataSourceService;
     }
 
     public List<FileEntity> findAll() {
@@ -45,14 +45,13 @@ public class FileService {
         userRepository.save(user);
     }
 
-
     public byte[] downloadFile(String path, String name) {
-        return s3ConnectionService.downloadFile(path, name);
+        return DataSourceService.downloadFile(path, name);
     }
 
     public void uploadFile(String fileName, String path, InputStream inputStream, Long contentLength, UserEntity owner) {
         try {
-            s3ConnectionService.uploadFile(fileName, path, inputStream, contentLength);
+            DataSourceService.uploadFile(fileName, path, inputStream, contentLength);
         } catch (Exception e) {
             return;
         }
