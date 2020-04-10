@@ -18,8 +18,8 @@ import com.vaadin.flow.server.StreamResource;
 
 import java.io.ByteArrayInputStream;
 
-@Route("list")
-@PageTitle("Wszystkie pliki | VaadinPWA")
+@Route(value = "list", layout = MainLayout.class)
+@PageTitle("Wszystkie pliki | ShareYourNotes")
 public class ListFileView extends VerticalLayout {
 
     private Grid<FileEntity> grid = new Grid<>(FileEntity.class);

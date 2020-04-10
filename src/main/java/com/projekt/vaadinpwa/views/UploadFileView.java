@@ -14,8 +14,8 @@ import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@Route("upload")
-@PageTitle("Dodaj plik | VaadinPWA")
+@Route(value = "upload", layout = MainLayout.class)
+@PageTitle("Dodaj plik | ShareYourNotes")
 public class UploadFileView extends VerticalLayout {
     private FileService fileService;
 

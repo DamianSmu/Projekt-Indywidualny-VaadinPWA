@@ -10,8 +10,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@Route("")
-@PageTitle("Start | VaadinPWA")
+@Route(value = "", layout = MainLayout.class)
+@PageTitle("Start | ShareYourNotes")
 public class StartView extends VerticalLayout {
 
     public StartView() {
