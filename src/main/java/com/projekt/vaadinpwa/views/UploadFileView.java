@@ -1,6 +1,7 @@
 package com.projekt.vaadinpwa.views;
 
 import com.projekt.vaadinpwa.backend.service.FileService;
+import com.projekt.vaadinpwa.views.translation.UploadTranslation;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -17,6 +18,7 @@ import com.vaadin.flow.router.Route;
 @Route(value = "upload", layout = MainLayout.class)
 @PageTitle("Dodaj plik | ShareYourNotes")
 public class UploadFileView extends VerticalLayout {
+    
     private FileService fileService;
 
     public UploadFileView(FileService fileService) {
@@ -42,6 +44,7 @@ public class UploadFileView extends VerticalLayout {
     private void configureUploader() {
         MemoryBuffer buffer = new MemoryBuffer();
         Upload upload = new Upload(buffer);
+        upload.setI18n(UploadTranslation.get());
         upload.addSucceededListener(event -> {
             fileService.uploadFile(event.getFileName(), /*TODO*/"", buffer.getInputStream(), event.getContentLength(), /*TODO*/null);
             add(new Paragraph("Plik " + event.getFileName() + " dodany pomyślnie."));
