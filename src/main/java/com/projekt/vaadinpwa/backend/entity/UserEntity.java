@@ -24,6 +24,9 @@ public class UserEntity extends AbstractEntity {
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<FileEntity> files = new LinkedList<>();
 
+    @NotNull
+    private String password = "";
+
     public UserEntity() {
     }
 
@@ -45,5 +48,13 @@ public class UserEntity extends AbstractEntity {
 
     public List<FileEntity> getFiles() {
         return files;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
