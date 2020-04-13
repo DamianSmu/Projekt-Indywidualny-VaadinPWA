@@ -33,16 +33,39 @@ public class FileService {
     @PostConstruct
     public void generateTestData() {
         if (userRepository.count() == 0) {
-            generateTestUser();
+            UserEntity testUser = generateTestUser();
         }
+
+        FileEntity fileA = new FileEntity();
+        fileA.setOwner(testUser);
+        fileA.setName("fileA.mp4");
+        fileA.setParent(null);
+        fileA.setDirectory(false);
+        fileRepository.save(fileA);
+
+
+        FileEntity dirA = new FileEntity();
+        dirA.setOwner(testUser);
+        dirA.setName("dirA");
+        dirA.setParent(null);
+        dirA.setDirectory(true);
+        fileRepository.save(dirA);
+
+        FileEntity fileB = new FileEntity();
+        fileB.setOwner(testUser);
+        fileB.setName("fileB.pdf");
+        fileB.setParent(dirA);
+        fileB.setDirectory(false);
+        fileRepository.save(fileB);
     }
 
-    public void generateTestUser() {
+    public UserEntity generateTestUser() {
         UserEntity user = new UserEntity();
         user.setUserName("TestUser");
         user.setEmail("testuser@gmail.com");
         testUser = user;
         userRepository.save(user);
+        return user;
     }
 
     public byte[] downloadFile(String path, String name) {
@@ -61,5 +84,13 @@ public class FileService {
         //TODO
         file.setOwner(testUser);
         fileRepository.save(file);
+    }
+
+    public List<FileEntity> getRoot() {
+        return fileRepository.findByParentIsNull();
+    }
+
+    public List<FileEntity> getChildren(FileEntity parent) {
+        return fileRepository.findByParent(parent);
     }
 }

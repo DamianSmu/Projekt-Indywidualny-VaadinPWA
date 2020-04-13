@@ -6,7 +6,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -18,7 +18,7 @@ import com.vaadin.flow.router.Route;
 @Route(value = "upload", layout = MainLayout.class)
 @PageTitle("Dodaj plik | ShareYourNotes")
 public class UploadFileView extends VerticalLayout {
-    
+
     private FileService fileService;
 
     public UploadFileView(FileService fileService) {
@@ -47,7 +47,9 @@ public class UploadFileView extends VerticalLayout {
         upload.setI18n(UploadTranslation.get());
         upload.addSucceededListener(event -> {
             fileService.uploadFile(event.getFileName(), /*TODO*/"", buffer.getInputStream(), event.getContentLength(), /*TODO*/null);
-            add(new Paragraph("Plik " + event.getFileName() + " dodany pomyślnie."));
+            Notification.show(
+                    "Plik " + event.getFileName() + " został dodany pomyślnie.", 4000,
+                    Notification.Position.BOTTOM_CENTER);
         });
         add(upload);
     }

@@ -13,7 +13,7 @@ import com.vaadin.flow.router.RouterLink;
 
 @CssImport("./styles/app-style.css")
 public class MainLayout extends AppLayout {
-    public MainLayout(){
+    public MainLayout() {
         createHeader();
         createDrawer();
     }
@@ -30,13 +30,16 @@ public class MainLayout extends AppLayout {
         header.setWidth("100%");
         header.addClassName("header");
         addToNavbar(header);
+        setDrawerOpened(false);
     }
 
     private void createDrawer() {
         RouterLink uploadFileLink = new RouterLink("Dodaj pliki", UploadFileView.class);
         uploadFileLink.setHighlightCondition(HighlightConditions.sameLocation());
+
         RouterLink listFilesLink = new RouterLink("Zobacz pliki", ListFileView.class);
         uploadFileLink.setHighlightCondition(HighlightConditions.sameLocation());
+
         addToDrawer(new VerticalLayout(uploadFileLink, listFilesLink));
     }
 }
