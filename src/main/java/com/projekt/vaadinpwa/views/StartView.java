@@ -1,9 +1,11 @@
 package com.projekt.vaadinpwa.views;
 
+import com.projekt.vaadinpwa.backend.security.SecurityUtils;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -27,6 +29,8 @@ public class StartView extends VerticalLayout {
         setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         setAlignItems(FlexComponent.Alignment.CENTER);
 
-        add(new H2("Wybierz chcesz zrobić"), new HorizontalLayout(goToUploadButton, goToListFileButton));
+        String userName = SecurityUtils.getLoggedUserName();
+
+        add(new H2("Witaj " + userName + "!"), new H3("Wybierz chcesz zrobić"), new HorizontalLayout(goToUploadButton, goToListFileButton));
     }
 }

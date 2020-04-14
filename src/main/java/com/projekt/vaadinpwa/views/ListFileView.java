@@ -54,7 +54,6 @@ public class ListFileView extends VerticalLayout {
                 file.getOwner() == null ? "-" : file.getOwner().getUserName()
         ).setHeader("Właściciel");
         grid.addComponentColumn(this::createDownloadButton);
-        grid.setItems(fileService.findAll());
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.setItems(fileService.getRoot(), fileService::getChildren);
     }

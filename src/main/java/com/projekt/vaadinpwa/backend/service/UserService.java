@@ -2,6 +2,7 @@ package com.projekt.vaadinpwa.backend.service;
 
 import com.projekt.vaadinpwa.backend.entity.UserEntity;
 import com.projekt.vaadinpwa.backend.repository.UserRepository;
+import com.projekt.vaadinpwa.backend.security.SecurityUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -65,4 +66,7 @@ public class UserService implements UserDetailsService {
         return new User(user.getUserName(), user.getPassword(), grantedAuthorities);
     }
 
+    public Optional<UserEntity> getLoggedUser() {
+        return findByUserName(SecurityUtils.getLoggedUserName());
+    }
 }

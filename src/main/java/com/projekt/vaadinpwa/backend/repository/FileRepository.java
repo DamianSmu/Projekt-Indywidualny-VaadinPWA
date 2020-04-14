@@ -8,5 +8,9 @@ import java.util.List;
 public interface FileRepository extends JpaRepository<FileEntity, Long> {
     List<FileEntity> findByParentIsNull();
 
+    List<FileEntity> findByParentIsNullAndDirectoryIsTrue();
+
     List<FileEntity> findByParent(FileEntity parent);
+
+    List<FileEntity> findByParentAndDirectoryIsTrue(FileEntity parent);
 }

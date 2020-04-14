@@ -34,6 +34,7 @@ public class FileService {
         FileEntity fileA = new FileEntity();
         fileA.setOwner(testUser);
         fileA.setName("fileA.mp4");
+        fileA.setPath("");
         fileA.setParent(null);
         fileA.setDirectory(false);
         fileRepository.save(fileA);
@@ -42,6 +43,7 @@ public class FileService {
         FileEntity dirA = new FileEntity();
         dirA.setOwner(testUser);
         dirA.setName("dirA");
+        dirA.setPath("dirA/");
         dirA.setParent(null);
         dirA.setDirectory(true);
         fileRepository.save(dirA);
@@ -49,6 +51,7 @@ public class FileService {
         FileEntity fileB = new FileEntity();
         fileB.setOwner(testUser);
         fileB.setName("fileB.pdf");
+        fileB.setPath(dirA.getPath() + "/" + "fileB.pdf");
         fileB.setParent(dirA);
         fileB.setDirectory(false);
         fileRepository.save(fileB);
@@ -67,8 +70,8 @@ public class FileService {
         FileEntity file = new FileEntity();
         file.setName(fileName);
         file.setPath(path);
-        //TODO
-        file.setOwner(null);
+        file.setOwner(owner);
+        file.setDirectory(false);
         fileRepository.save(file);
     }
 
@@ -76,7 +79,26 @@ public class FileService {
         return fileRepository.findByParentIsNull();
     }
 
+    public List<FileEntity> getDirRoot() {
+        return fileRepository.findByParentIsNullAndDirectoryIsTrue();
+    }
+
     public List<FileEntity> getChildren(FileEntity parent) {
         return fileRepository.findByParent(parent);
+    }
+
+    public List<FileEntity> getDirChildren(FileEntity parent) {
+        return fileRepository.findByParentAndDirectoryIsTrue(parent);
+    }
+
+    public void createNewDirectory(String fileName, String path, FileEntity parent, UserEntity owner)
+    {
+        FileEntity file = new FileEntity();
+        file.setName(fileName);
+        file.setPath(path);
+        file.setOwner(owner);
+        file.setDirectory(true);
+        file.setParent(parent);
+        fileRepository.save(file);
     }
 }

@@ -11,7 +11,7 @@ public class FileEntity extends AbstractEntity {
 
     private String name;
     private String path;
-    private boolean isDirectory;
+    private boolean directory;
 
     @ManyToOne(optional = true, cascade = CascadeType.REMOVE)
     private FileEntity parent;
@@ -56,10 +56,10 @@ public class FileEntity extends AbstractEntity {
     }
 
     public boolean isDirectory() {
-        return isDirectory;
+        return directory;
     }
 
     public void setDirectory(boolean directory) {
-        isDirectory = directory;
+        this.directory = directory;
     }
 }
