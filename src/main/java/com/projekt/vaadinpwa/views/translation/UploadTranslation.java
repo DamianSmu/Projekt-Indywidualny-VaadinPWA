@@ -13,7 +13,7 @@ public class UploadTranslation {
                 .setCancel("Anuluj")
                 .setError(new UploadI18N.Error()
                         .setTooManyFiles("Zbyt wiele plików.")
-                        .setFileIsTooBig("Wybrany plik jest za duży.")
+                        .setFileIsTooBig("Wybrany plik może mieć rozmiar maksymalnie 10MB")
                         .setIncorrectFileType("Nieprawidłowy typ pliku."))
                 .setUploading(new UploadI18N.Uploading()
                         .setStatus(new UploadI18N.Uploading.Status()
