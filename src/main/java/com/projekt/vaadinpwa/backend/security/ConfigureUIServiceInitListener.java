@@ -1,6 +1,7 @@
 package com.projekt.vaadinpwa.backend.security;
 
 import com.projekt.vaadinpwa.views.LoginView;
+import com.projekt.vaadinpwa.views.RegisterView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
@@ -18,7 +19,7 @@ public class ConfigureUIServiceInitListener implements VaadinServiceInitListener
     }
 
     private void authenticateNavigation(BeforeEnterEvent event) {
-        if (!LoginView.class.equals(event.getNavigationTarget())
+        if (!(LoginView.class.equals(event.getNavigationTarget()) || RegisterView.class.equals(event.getNavigationTarget()))
                 && !SecurityUtils.isUserLoggedIn()) {
             event.rerouteTo(LoginView.class);
         }
