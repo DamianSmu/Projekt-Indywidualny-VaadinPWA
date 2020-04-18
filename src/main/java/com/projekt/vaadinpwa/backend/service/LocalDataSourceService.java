@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Profile("!prod")
@@ -14,9 +15,12 @@ import java.nio.file.Paths;
 public class LocalDataSourceService implements DataSourceService {
     @Override
     public void uploadFile(String name, String path, InputStream stream, Long streamLength) {
-
+        new File(path).mkdirs();
+        String strNewFile = path + name;
+        File newFile = new File(strNewFile);
+        Path newFilePath = newFile.toPath();
         try {
-            Files.copy(stream, Paths.get(path + name));
+            Files.copy(stream, newFilePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
