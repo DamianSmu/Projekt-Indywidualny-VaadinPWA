@@ -30,38 +30,13 @@ public class FileService {
     public void generateTestData() {
         userService.saveUser("user", "testuser@gmail.com", "password");
         UserEntity testUser = userService.findByUserName("user").get();
-
-        FileEntity fileA = new FileEntity();
-        fileA.setOwner(testUser);
-        fileA.setName("fileA.mp4");
-        fileA.setPath("");
-        fileA.setParent(null);
-        fileA.setDirectory(false);
-        fileRepository.save(fileA);
-
-
-        FileEntity dirA = new FileEntity();
-        dirA.setOwner(testUser);
-        dirA.setName("dirA");
-        dirA.setPath("dirA/");
-        dirA.setParent(null);
-        dirA.setDirectory(true);
-        fileRepository.save(dirA);
-
-        FileEntity fileB = new FileEntity();
-        fileB.setOwner(testUser);
-        fileB.setName("fileB.pdf");
-        fileB.setPath(dirA.getPath() + "/" + "fileB.pdf");
-        fileB.setParent(dirA);
-        fileB.setDirectory(false);
-        fileRepository.save(fileB);
     }
 
     public byte[] downloadFile(String path, String name) {
         return DataSourceService.downloadFile(path, name);
     }
 
-    public void uploadFile(String fileName, String path, InputStream inputStream, Long contentLength, UserEntity owner) {
+    public void uploadFile(String fileName, String path, InputStream inputStream, Long contentLength, UserEntity owner, FileEntity directory) {
         try {
             DataSourceService.uploadFile(fileName, path, inputStream, contentLength);
         } catch (Exception e) {
@@ -72,6 +47,8 @@ public class FileService {
         file.setPath(path);
         file.setOwner(owner);
         file.setDirectory(false);
+        if(directory != null)
+            file.setParent(directory);
         fileRepository.save(file);
     }
 
@@ -91,7 +68,7 @@ public class FileService {
         return fileRepository.findByParentAndDirectoryIsTrue(parent);
     }
 
-    public void createNewDirectory(String fileName, String path, FileEntity parent, UserEntity owner)
+    public FileEntity createNewDirectory(String fileName, String path, FileEntity parent, UserEntity owner)
     {
         FileEntity file = new FileEntity();
         file.setName(fileName);
@@ -99,6 +76,6 @@ public class FileService {
         file.setOwner(owner);
         file.setDirectory(true);
         file.setParent(parent);
-        fileRepository.save(file);
+        return fileRepository.save(file);
     }
 }
