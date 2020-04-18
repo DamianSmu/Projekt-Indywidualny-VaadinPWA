@@ -1,7 +1,10 @@
 package com.projekt.vaadinpwa.views;
 
 import com.projekt.vaadinpwa.views.translation.LoginFormTranslation;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -16,6 +19,7 @@ import java.util.Collections;
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private LoginForm login = new LoginForm();
+    private Button registerButton = new Button("Zarejestruj się!");
 
     public LoginView() {
         setSizeFull();
@@ -25,7 +29,14 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         login.setAction("login");
         login.setI18n(LoginFormTranslation.get());
 
-        add(new H1("ShareYourNotes!"), login);
+        registerButton.addClickListener(e -> UI.getCurrent().navigate(RegisterView.class));
+
+        add(
+                new H1("ShareYourNotes!"),
+                login,
+                new H3("Nie masz konta?"),
+                registerButton
+        );
     }
 
     @Override

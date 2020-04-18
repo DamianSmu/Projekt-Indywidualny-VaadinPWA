@@ -1,9 +1,11 @@
 package com.projekt.vaadinpwa.views;
 
 import com.projekt.vaadinpwa.backend.service.UserService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -21,6 +23,7 @@ public class RegisterView extends VerticalLayout {
     private TextField email = new TextField("Adres e-mail");
     private PasswordField password = new PasswordField("Hasło");
     private Button registerButton = new Button("Zarejestruj");
+    private Button loginButton = new Button("Zaloguj się");
 
     public RegisterView(UserService userService) {
         this.userService = userService;
@@ -47,12 +50,20 @@ public class RegisterView extends VerticalLayout {
         registerButton.setEnabled(false);
         registerButton.addClickListener(e -> registerUser());
 
-        H1 title = new H1("Zarejestruj się");
-        add(title, fields, registerButton);
+        loginButton.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
+
+        add(
+                new H1("Zarejestruj się"),
+                fields,
+                registerButton,
+                new H3("Masz już konto?"),
+                loginButton
+        );
     }
 
     private void registerUser() {
         userService.saveUser(userName.getValue(), email.getValue(), password.getValue());
+        UI.getCurrent().navigate(LoginView.class);
     }
 
     private void validateUserName() {
