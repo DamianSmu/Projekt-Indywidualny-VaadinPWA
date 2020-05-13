@@ -68,8 +68,7 @@ public class FileService {
         return fileRepository.findByParentAndDirectoryIsTrue(parent);
     }
 
-    public FileEntity createNewDirectory(String fileName, String path, FileEntity parent, UserEntity owner)
-    {
+    public FileEntity createNewDirectory(String fileName, String path, FileEntity parent, UserEntity owner) {
         FileEntity file = new FileEntity();
         file.setName(fileName);
         file.setPath(path);

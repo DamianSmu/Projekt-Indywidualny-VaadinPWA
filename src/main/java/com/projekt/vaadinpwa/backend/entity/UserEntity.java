@@ -22,7 +22,7 @@ public class UserEntity extends AbstractEntity {
     private String email = "";
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<FileEntity> files = new LinkedList<>();
+    private final List<FileEntity> files = new LinkedList<>();
 
     @NotNull
     private String password = "";

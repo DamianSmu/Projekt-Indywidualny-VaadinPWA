@@ -31,6 +31,6 @@ public class StartView extends VerticalLayout {
 
         String userName = SecurityUtils.getLoggedUserName();
 
-        add(new H2("Witaj " + userName + "!"), new H3("Wybierz chcesz zrobić"), new HorizontalLayout(goToUploadButton, goToListFileButton));
+        add(new H2("Witaj " + userName + "!"), new H3("Wybierz co chcesz zrobić"), new HorizontalLayout(goToUploadButton, goToListFileButton));
     }
 }

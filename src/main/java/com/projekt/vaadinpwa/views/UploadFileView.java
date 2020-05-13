@@ -79,9 +79,9 @@ public class UploadFileView extends VerticalLayout {
         add(
                 new H1("Dodaj plik"),
                 upload,
-                new HorizontalLayout(goToListFileButton, goToStartButton),
                 newFileLayout,
-                folderGrid
+                folderGrid,
+                new HorizontalLayout(goToListFileButton, goToStartButton)
         );
     }
 
