@@ -14,12 +14,12 @@ public class FileService {
 
     private FileRepository fileRepository;
     private UserService userService;
-    private DataSourceService DataSourceService;
+    private DataSourceService dataSourceService;
 
-    public FileService(FileRepository fileRepository, UserService userService, DataSourceService DataSourceService) {
+    public FileService(FileRepository fileRepository, UserService userService, DataSourceService dataSourceService) {
         this.fileRepository = fileRepository;
         this.userService = userService;
-        this.DataSourceService = DataSourceService;
+        this.dataSourceService = dataSourceService;
     }
 
     public List<FileEntity> findAll() {
@@ -33,12 +33,12 @@ public class FileService {
     }
 
     public byte[] downloadFile(String path, String name) {
-        return DataSourceService.downloadFile(path, name);
+        return dataSourceService.downloadFile(path, name);
     }
 
     public void uploadFile(String fileName, String path, InputStream inputStream, Long contentLength, UserEntity owner, FileEntity directory) {
         try {
-            DataSourceService.uploadFile(fileName, path, inputStream, contentLength);
+            dataSourceService.uploadFile(fileName, path, inputStream, contentLength);
         } catch (Exception e) {
             return;
         }
@@ -76,5 +76,13 @@ public class FileService {
         file.setDirectory(true);
         file.setParent(parent);
         return fileRepository.save(file);
+    }
+
+    public void deleteFile(FileEntity fileEntity)
+    {
+        while (!getChildren(fileEntity).isEmpty())
+            getChildren(fileEntity).forEach(this::deleteFile);
+        dataSourceService.removeFile(fileEntity.getName(), fileEntity.getPath());
+        fileRepository.delete(fileEntity);
     }
 }

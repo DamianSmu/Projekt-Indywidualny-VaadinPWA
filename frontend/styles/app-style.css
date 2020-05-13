@@ -11,3 +11,9 @@ a[highlight] {
     font-size: 1em;
     margin: var(--lumo-space-m);
 }
+
+.layout-with-border {
+    border: 1px solid #959595;
+    padding: 10px;
+    box-sizing: border-box;
+}

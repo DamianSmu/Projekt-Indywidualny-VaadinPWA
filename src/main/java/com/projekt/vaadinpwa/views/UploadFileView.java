@@ -94,7 +94,7 @@ public class UploadFileView extends VerticalLayout {
         add(upload);
     }
 
-    private TreeGrid<FileEntity> configureGrid() {
+    private void configureGrid() {
         folderGrid = new TreeGrid<>(FileEntity.class);
         folderGrid.removeAllColumns();
         folderGrid.addComponentColumn(file -> VaadinIcon.FOLDER_OPEN_O.create()).setFlexGrow(0).setWidth("100px");
@@ -109,7 +109,6 @@ public class UploadFileView extends VerticalLayout {
             chosenFolderLabel.setText("Wybrany folder to: " + (selectedPath.equals("") ? "katalog główny" : selectedPath));
         });
         folderGrid.setItems(fileService.getDirRoot(), fileService::getDirChildren);
-        return folderGrid;
     }
 
     private void configureNewFolderButtonAndTextField() {
@@ -151,6 +150,6 @@ public class UploadFileView extends VerticalLayout {
         fileService.uploadFile(event.getFileName(), selectedPath, buffer.getInputStream(), event.getContentLength(), loggedUser, selectedDirectory);
         Notification.show(
                 "Plik " + event.getFileName() + " został dodany pomyślnie.", 4000,
-                Notification.Position.BOTTOM_CENTER);
+                Notification.Position.TOP_CENTER);
     }
 }
