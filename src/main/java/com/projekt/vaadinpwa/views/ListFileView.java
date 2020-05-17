@@ -63,35 +63,25 @@ public class ListFileView extends VerticalLayout {
         grid.setItems(fileService.getRoot(), fileService::getChildren);
 
         grid.setDetailsVisibleOnClick(false);
-        grid.setItemDetailsRenderer(new ComponentRenderer<>(
-                item -> {
-                    HorizontalLayout layout = new HorizontalLayout();
-                    layout.addClassName("layout-with-border");
-                    layout.setJustifyContentMode(JustifyContentMode.START);
-                    layout.setAlignItems(Alignment.CENTER);
-                    layout.setMaxWidth("50em");
-                    layout.add(createDownloadButton(item), createDeleteButton(item));
-                    Label date = new Label("Data dodania: 05-05-2020");
-                    layout.add(date);
-                    layout.expand(date);
-                    return layout;
-                }
-        ));
+        grid.setItemDetailsRenderer(new ComponentRenderer<>(this::createItemDetails));
     }
 
     public Anchor createDownloadButton(FileEntity file) {
-        Anchor anchorDownload;
+        Button btnDownload;
+        StreamResource streamResource;
         if (!file.isDirectory()) {
-            Button btnDownload = new Button("Pobierz");
-            StreamResource StreamResource = new StreamResource(file.getName(), () ->
+            btnDownload = new Button("Pobierz plik");
+            streamResource = new StreamResource(file.getName(), () ->
                     new ByteArrayInputStream(fileService.downloadFile(file.getPath(), file.getName())));
-            anchorDownload = new Anchor(StreamResource, "");
-            anchorDownload.getElement().setAttribute("download", true);
-            anchorDownload.add(btnDownload);
-            return anchorDownload;
+        } else {
+            btnDownload = new Button("Pobierz ZIP");
+            String fileName = file.getPath().replace("/", "-").substring(0, file.getPath().length() - 1).concat(".zip");
+            streamResource = new StreamResource(fileName, () ->
+                    new ByteArrayInputStream(fileService.downloadZip(file.getPath())));
         }
-        anchorDownload = new Anchor();
-        anchorDownload.setVisible(false);
+        Anchor anchorDownload = new Anchor(streamResource, "");
+        anchorDownload.getElement().setAttribute("download", true);
+        anchorDownload.add(btnDownload);
         return anchorDownload;
     }
 
@@ -115,5 +105,18 @@ public class ListFileView extends VerticalLayout {
         button.setIcon(VaadinIcon.ELLIPSIS_DOTS_H.create());
         button.addClickListener(e -> grid.setDetailsVisible(file, !grid.isDetailsVisible(file)));
         return button;
+    }
+
+    private HorizontalLayout createItemDetails(FileEntity item) {
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.addClassName("layout-with-border");
+        layout.setJustifyContentMode(JustifyContentMode.START);
+        layout.setAlignItems(Alignment.CENTER);
+        layout.setMaxWidth("50em");
+        layout.add(createDownloadButton(item), createDeleteButton(item));
+        Label date = new Label("Data dodania: 05-05-2020");
+        layout.add(date);
+        layout.expand(date);
+        return layout;
     }
 }

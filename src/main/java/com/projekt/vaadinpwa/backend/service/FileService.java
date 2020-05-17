@@ -36,6 +36,10 @@ public class FileService {
         return dataSourceService.downloadFile(path, name);
     }
 
+    public byte[] downloadZip(String path) {
+        return dataSourceService.downloadZip(path);
+    }
+
     public void uploadFile(String fileName, String path, InputStream inputStream, Long contentLength, UserEntity owner, FileEntity directory) {
         try {
             dataSourceService.uploadFile(fileName, path, inputStream, contentLength);

@@ -40,4 +40,10 @@ public class LocalDataSourceService implements DataSourceService {
     public void removeFile(String name, String path) {
         new File(path + name).delete();
     }
+
+    @Override
+    public byte[] downloadZip(String path) {
+        //TODO
+        return new byte[0];
+    }
 }

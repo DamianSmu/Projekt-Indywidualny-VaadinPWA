@@ -8,4 +8,6 @@ public interface DataSourceService {
     byte[] downloadFile(String path, String name);
 
     void removeFile(String name, String path);
+
+    byte[] downloadZip(String path);
 }

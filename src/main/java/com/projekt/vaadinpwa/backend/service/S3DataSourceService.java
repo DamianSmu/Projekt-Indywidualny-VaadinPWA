@@ -1,18 +1,20 @@
 package com.projekt.vaadinpwa.backend.service;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Profile("prod")
 @Service
@@ -61,6 +63,47 @@ public class S3DataSourceService implements DataSourceService {
 
     @Override
     public void removeFile(String name, String path) {
-
+        try {
+            s3client.deleteObject(new DeleteObjectRequest(bucketName, path + name));
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
     }
+
+
+    public byte[] downloadZip(String path) {
+        String delimiter = "/";
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(os);
+        ListObjectsRequest request = new ListObjectsRequest().withBucketName(bucketName).withPrefix(path);
+        try {
+            ObjectListing result;
+            do {
+                result = s3client.listObjects(request);
+                for (S3ObjectSummary summary : result.getObjectSummaries()) {
+                    if (!summary.getKey().endsWith(delimiter)) {
+                        S3Object s3object = s3client.getObject(bucketName, summary.getKey());
+                        S3ObjectInputStream inputStream = s3object.getObjectContent();
+                        ZipEntry zipEntry = new ZipEntry(summary.getKey());
+                        zos.putNextEntry(zipEntry);
+                        byte[] bytes = new byte[1024];
+                        int length;
+                        while ((length = inputStream.read(bytes)) >= 0) {
+                            zos.write(bytes, 0, length);
+                        }
+                        zos.closeEntry();
+                        inputStream.close();
+                    }
+                }
+                request.setMarker(result.getMarker());
+            }
+            while (result.isTruncated());
+            zos.close();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return os.toByteArray();
+    }
+
 }
