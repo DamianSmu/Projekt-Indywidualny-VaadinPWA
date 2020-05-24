@@ -41,6 +41,6 @@ public class MainLayout extends AppLayout {
         listFilesLink.setHighlightCondition(HighlightConditions.sameLocation());
         myFilesLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        addToDrawer(new VerticalLayout(uploadFileLink, listFilesLink));
+        addToDrawer(new VerticalLayout(uploadFileLink, listFilesLink, myFilesLink));
     }
 }

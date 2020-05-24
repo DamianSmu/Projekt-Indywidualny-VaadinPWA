@@ -22,7 +22,7 @@ public class S3DataSourceService implements DataSourceService {
 
     private static final String bucketName = "vaadin-pwa-files-bucket";
 
-    private AmazonS3 s3client;
+    private final AmazonS3 s3client;
 
     public S3DataSourceService() {
         s3client = AmazonS3ClientBuilder

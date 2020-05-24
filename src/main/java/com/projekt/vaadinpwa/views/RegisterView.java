@@ -53,11 +53,11 @@ public class RegisterView extends VerticalLayout {
         loginButton.addClickListener(e -> UI.getCurrent().navigate(LoginView.class));
 
         add(
-                new H1("Zarejestruj się"),
-                fields,
-                registerButton,
-                new H3("Masz już konto?"),
-                loginButton
+            new H1("Zarejestruj się"),
+            fields,
+            registerButton,
+            new H3("Masz już konto?"),
+            loginButton
         );
     }
 

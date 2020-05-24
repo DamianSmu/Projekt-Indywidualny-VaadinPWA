@@ -5,6 +5,7 @@ import com.projekt.vaadinpwa.backend.entity.UserEntity;
 import com.projekt.vaadinpwa.backend.service.FileService;
 import com.projekt.vaadinpwa.backend.service.UserService;
 import com.projekt.vaadinpwa.views.translation.UploadTranslation;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -31,7 +32,6 @@ import com.vaadin.flow.router.Route;
 public class UploadFileView extends VerticalLayout {
 
     private final FileService fileService;
-    private final UserService userService;
     private String selectedPath = "";
     private FileEntity selectedDirectory = null;
 
@@ -45,7 +45,6 @@ public class UploadFileView extends VerticalLayout {
 
     public UploadFileView(FileService fileService, UserService userService) {
         this.fileService = fileService;
-        this.userService = userService;
 
         loggedUser = userService.getLoggedUser().get();
 
@@ -56,31 +55,12 @@ public class UploadFileView extends VerticalLayout {
         configureUploader();
         configureGrid();
         configureNewFolderButtonAndTextField();
-
-        Button goToListFileButton = new Button("Zobacz pliki");
-        goToListFileButton.addClickListener(e -> UI.getCurrent().navigate(ListFileView.class));
-        goToListFileButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-        Button goToStartButton = new Button("Wróć");
-        goToStartButton.addClickListener(e -> UI.getCurrent().navigate(StartView.class));
-
-        HorizontalLayout newFileLayout = new HorizontalLayout();
-        newFileLayout.setWidthFull();
-        newFileLayout.setAlignItems(Alignment.START);
-        newFileLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
-        newFileLayout.add(
-                chosenFolderLabel = new H3("Wybrany folder to: " + (selectedPath.equals("") ? "katalog główny" : selectedPath)),
-                newFolderName,
-                newFolderButton
-        );
-        newFileLayout.expand(chosenFolderLabel);
-
         add(
-                new H1("Dodaj plik"),
-                upload,
-                newFileLayout,
-                folderGrid,
-                new HorizontalLayout(goToListFileButton, goToStartButton)
+            new H1("Dodaj plik"),
+            upload,
+            createNewFileLayout(),
+            folderGrid,
+            createNavigationButtons()
         );
     }
 
@@ -137,18 +117,42 @@ public class UploadFileView extends VerticalLayout {
 
     private void createNewFolder() {
         FileEntity newFile = fileService.createNewDirectory(newFolderName.getValue(), selectedPath + newFolderName.getValue() + "/", selectedDirectory, loggedUser);
-        folderGrid.setDataProvider(new TreeDataProvider<>((new TreeData<FileEntity>()).addItems(fileService.getDirRoot(), fileService::getDirChildren)));
+        folderGrid.setDataProvider(new TreeDataProvider<>(new TreeData<FileEntity>().addItems(fileService.getDirRoot(), fileService::getDirChildren)));
         folderGrid.getDataProvider().refreshAll();
         if (newFile.getParent().isPresent()) {
             folderGrid.expand(newFile.getParent().get());
         }
     }
 
-    private void uploadFile(SucceededEvent event, MemoryBuffer buffer)
-    {
+    private void uploadFile(SucceededEvent event, MemoryBuffer buffer) {
         fileService.uploadFile(event.getFileName(), selectedPath, buffer.getInputStream(), event.getContentLength(), loggedUser, selectedDirectory);
         Notification.show(
                 "Plik " + event.getFileName() + " został dodany pomyślnie.", 4000,
                 Notification.Position.TOP_CENTER);
+    }
+
+    private Component createNavigationButtons() {
+        Button goToListFileButton = new Button("Zobacz pliki");
+        goToListFileButton.addClickListener(e -> UI.getCurrent().navigate(ListFileView.class));
+        goToListFileButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        Button goToStartButton = new Button("Wróć");
+        goToStartButton.addClickListener(e -> UI.getCurrent().navigate(StartView.class));
+
+        return new HorizontalLayout(goToListFileButton, goToStartButton);
+    }
+
+    public Component createNewFileLayout() {
+        HorizontalLayout newFileLayout = new HorizontalLayout();
+        newFileLayout.setWidthFull();
+        newFileLayout.setAlignItems(Alignment.START);
+        newFileLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        newFileLayout.add(
+                chosenFolderLabel = new H3("Wybrany folder to: " + (selectedPath.equals("") ? "katalog główny" : selectedPath)),
+                newFolderName,
+                newFolderButton
+        );
+        newFileLayout.expand(chosenFolderLabel);
+        return newFileLayout;
     }
 }

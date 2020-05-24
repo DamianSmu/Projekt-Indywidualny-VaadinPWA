@@ -15,9 +15,9 @@ import java.util.Set;
 @Service
 public class FileService {
 
-    private FileRepository fileRepository;
-    private UserService userService;
-    private DataSourceService dataSourceService;
+    private final FileRepository fileRepository;
+    private final UserService userService;
+    private final DataSourceService dataSourceService;
 
     public FileService(FileRepository fileRepository, UserService userService, DataSourceService dataSourceService) {
         this.fileRepository = fileRepository;

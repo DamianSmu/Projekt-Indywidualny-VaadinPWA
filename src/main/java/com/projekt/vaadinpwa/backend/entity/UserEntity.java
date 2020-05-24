@@ -27,8 +27,7 @@ public class UserEntity extends AbstractEntity {
     @NotNull
     private String password = "";
 
-    public UserEntity() {
-    }
+    public UserEntity() {}
 
     public String getUserName() {
         return userName;

@@ -5,6 +5,7 @@ import com.projekt.vaadinpwa.backend.entity.UserEntity;
 import com.projekt.vaadinpwa.backend.service.FileService;
 import com.projekt.vaadinpwa.backend.service.UserService;
 import com.projekt.vaadinpwa.views.components.DownloadButton;
+import com.projekt.vaadinpwa.views.components.FileGrid;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -26,7 +27,7 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Moje pliki | ShareYourNotes")
 public class MyFilesListView extends VerticalLayout {
 
-    private TreeGrid<FileEntity> grid = new TreeGrid<>(FileEntity.class);
+    private TreeGrid<FileEntity> grid;
     private FileService fileService;
     private UserEntity loggedUser;
 
@@ -40,23 +41,14 @@ public class MyFilesListView extends VerticalLayout {
         setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         setAlignItems(FlexComponent.Alignment.CENTER);
 
+        grid = FileGrid.createBasicFileGrid();
         configureGrid();
         add(new H1("Twoje pliki"), grid, createNavigationButtons());
     }
 
     private void configureGrid() {
-        grid.removeAllColumns();
-        grid.addComponentColumn(file ->
-                file.isDirectory() ? VaadinIcon.FOLDER_OPEN_O.create() : VaadinIcon.FILE_O.create()
-        ).setFlexGrow(0).setWidth("100px");
-        grid.addHierarchyColumn(FileEntity::getName).setHeader("Nazwa");
-        grid.addColumn(file ->
-                file.getOwner() == null ? "-" : file.getOwner().getUserName()
-        ).setHeader("Właściciel");
         grid.addComponentColumn(this::createDetailsButton);
-        grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.setDataProvider(new TreeDataProvider<>(fileService.getAllOwnersFilesTreeData(loggedUser)));
-        grid.setDetailsVisibleOnClick(false);
         grid.setItemDetailsRenderer(new ComponentRenderer<>(f -> createItemDetails(f, f.getOwner().equals(loggedUser))));
     }
 
@@ -99,7 +91,7 @@ public class MyFilesListView extends VerticalLayout {
         return layout;
     }
 
-    public Component createNavigationButtons()
+    private Component createNavigationButtons()
     {
         Button goToUploadButton = new Button("Dodaj plik");
         goToUploadButton.addClickListener(e -> UI.getCurrent().navigate(UploadFileView.class));

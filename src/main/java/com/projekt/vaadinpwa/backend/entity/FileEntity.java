@@ -19,8 +19,7 @@ public class FileEntity extends AbstractEntity {
     @JoinColumn(name = "user_id")
     private UserEntity owner;
 
-    public FileEntity() {
-    }
+    public FileEntity() {}
 
     public FileEntity(String name, String path, boolean directory, FileEntity parent, UserEntity owner) {
         this.name = name;

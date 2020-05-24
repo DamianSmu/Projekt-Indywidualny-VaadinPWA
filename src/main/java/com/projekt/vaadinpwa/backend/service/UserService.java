@@ -60,7 +60,6 @@ public class UserService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException("User: " + username + " not found");
         }
-
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("USER"));
         return new User(user.getUserName(), user.getPassword(), grantedAuthorities);
