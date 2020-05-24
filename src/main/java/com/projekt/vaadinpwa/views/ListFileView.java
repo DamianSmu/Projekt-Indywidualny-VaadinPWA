@@ -9,7 +9,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -60,9 +59,6 @@ public class ListFileView extends VerticalLayout {
         layout.setAlignItems(Alignment.CENTER);
         layout.setMaxWidth("50em");
         layout.add(DownloadButton.create(item, fileService));
-        Label date = new Label("Data dodania: 05-05-2020");
-        layout.add(date);
-        layout.expand(date);
         return layout;
     }
 

@@ -1,11 +1,14 @@
 package com.projekt.vaadinpwa.backend.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.util.Date;
 import java.util.Optional;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class FileEntity extends AbstractEntity {
 
     private String name;
@@ -19,7 +22,12 @@ public class FileEntity extends AbstractEntity {
     @JoinColumn(name = "user_id")
     private UserEntity owner;
 
-    public FileEntity() {}
+    @CreatedDate
+    @Column(name = "created_date", nullable = false, updatable = false)
+    private Date createdDate;
+
+    public FileEntity() {
+    }
 
     public FileEntity(String name, String path, boolean directory, FileEntity parent, UserEntity owner) {
         this.name = name;
@@ -67,5 +75,9 @@ public class FileEntity extends AbstractEntity {
 
     public void setDirectory(boolean directory) {
         this.directory = directory;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
     }
 }

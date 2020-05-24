@@ -33,7 +33,6 @@ public class FileService {
     public void generateTestData() {
         userService.saveUser("user", "testuser@gmail.com", "password");
         UserEntity testUser = userService.findByUserName("user").get();
-/*
         userService.saveUser("user2", "testuser@gmail.com", "password");
         UserEntity testUser2 = userService.findByUserName("user2").get();
 
@@ -48,7 +47,7 @@ public class FileService {
         fileRepository.save(c);
         fileRepository.save(d);
         fileRepository.save(e);
-        fileRepository.save(f);*/
+        fileRepository.save(f);
     }
 
     public byte[] downloadFile(String path, String name) {
