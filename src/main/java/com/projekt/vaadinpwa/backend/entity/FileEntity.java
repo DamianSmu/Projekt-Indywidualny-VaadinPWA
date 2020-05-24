@@ -1,6 +1,5 @@
 package com.projekt.vaadinpwa.backend.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,7 +12,7 @@ public class FileEntity extends AbstractEntity {
     private String path;
     private boolean directory;
 
-    @ManyToOne(optional = true, cascade = CascadeType.REMOVE)
+    @ManyToOne(optional = true)
     private FileEntity parent;
 
     @ManyToOne
@@ -21,6 +20,14 @@ public class FileEntity extends AbstractEntity {
     private UserEntity owner;
 
     public FileEntity() {
+    }
+
+    public FileEntity(String name, String path, boolean directory, FileEntity parent, UserEntity owner) {
+        this.name = name;
+        this.path = path;
+        this.directory = directory;
+        this.parent = parent;
+        this.owner = owner;
     }
 
     public String getName() {

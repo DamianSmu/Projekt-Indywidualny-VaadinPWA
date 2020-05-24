@@ -23,7 +23,6 @@ public class MainLayout extends AppLayout {
         logo.addClassName("logo");
 
         Anchor logout = new Anchor("/logout", "Wyloguj");
-
         HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), logo, logout);
         header.expand(logo);
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
@@ -35,10 +34,12 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         RouterLink uploadFileLink = new RouterLink("Dodaj pliki", UploadFileView.class);
-        uploadFileLink.setHighlightCondition(HighlightConditions.sameLocation());
-
         RouterLink listFilesLink = new RouterLink("Zobacz pliki", ListFileView.class);
+        RouterLink myFilesLink = new RouterLink("Twoje pliki", MyFilesListView.class);
+
         uploadFileLink.setHighlightCondition(HighlightConditions.sameLocation());
+        listFilesLink.setHighlightCondition(HighlightConditions.sameLocation());
+        myFilesLink.setHighlightCondition(HighlightConditions.sameLocation());
 
         addToDrawer(new VerticalLayout(uploadFileLink, listFilesLink));
     }

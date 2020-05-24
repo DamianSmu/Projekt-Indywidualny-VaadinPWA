@@ -41,7 +41,6 @@ public class UploadFileView extends VerticalLayout {
     private TextField newFolderName = new TextField();
     private H3 chosenFolderLabel;
 
-
     private UserEntity loggedUser;
 
     public UploadFileView(FileService fileService, UserService userService) {
