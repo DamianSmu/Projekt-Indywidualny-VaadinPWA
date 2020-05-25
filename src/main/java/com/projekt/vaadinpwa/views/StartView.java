@@ -17,13 +17,21 @@ import com.vaadin.flow.router.Route;
 public class StartView extends VerticalLayout {
 
     public StartView() {
+        String username = SecurityUtils.getLoggedUserName();
+        UI.getCurrent().getPage().executeJs(
+                "localStorage.setItem('username', '"+ username +", jesteś offline.')");
+
         Button goToUploadButton = new Button("Dodaj plik");
         goToUploadButton.addClickListener(e -> UI.getCurrent().navigate(UploadFileView.class));
         goToUploadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        Button goToListFileButton = new Button("Zobacz pliki");
+        Button goToListFileButton = new Button("Zobacz wszystkie pliki");
         goToListFileButton.addClickListener(e -> UI.getCurrent().navigate(ListFileView.class));
         goToListFileButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        Button goToMyFilesButton = new Button("Zobacz swoje pliki");
+        goToMyFilesButton.addClickListener(e -> UI.getCurrent().navigate(MyFilesListView.class));
+        goToMyFilesButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         setSizeFull();
         setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -31,6 +39,6 @@ public class StartView extends VerticalLayout {
 
         String userName = SecurityUtils.getLoggedUserName();
 
-        add(new H2("Witaj " + userName + "!"), new H3("Wybierz co chcesz zrobić"), new HorizontalLayout(goToUploadButton, goToListFileButton));
+        add(new H2("Witaj " + userName + "!"), new H3("Wybierz co chcesz zrobić"), new HorizontalLayout(goToUploadButton, goToListFileButton, goToMyFilesButton));
     }
 }

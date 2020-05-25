@@ -22,6 +22,8 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     private Button registerButton = new Button("Zarejestruj się!");
 
     public LoginView() {
+        UI.getCurrent().getPage().executeJs(
+                "localStorage.setItem('username', 'Jesteś offline.')");
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);

@@ -56,11 +56,11 @@ public class UploadFileView extends VerticalLayout {
         configureGrid();
         configureNewFolderButtonAndTextField();
         add(
-            new H1("Dodaj plik"),
-            upload,
-            createNewFileLayout(),
-            folderGrid,
-            createNavigationButtons()
+                new H1("Dodaj plik"),
+                upload,
+                createNewFileLayout(),
+                folderGrid,
+                createNavigationButtons()
         );
     }
 
@@ -143,16 +143,16 @@ public class UploadFileView extends VerticalLayout {
     }
 
     public Component createNewFileLayout() {
-        HorizontalLayout newFileLayout = new HorizontalLayout();
+        VerticalLayout newFileLayout = new VerticalLayout();
         newFileLayout.setWidthFull();
-        newFileLayout.setAlignItems(Alignment.START);
-        newFileLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        newFileLayout.setAlignItems(Alignment.CENTER);
+        newFileLayout.setJustifyContentMode(JustifyContentMode.CENTER);
         newFileLayout.add(
                 chosenFolderLabel = new H3("Wybrany folder to: " + (selectedPath.equals("") ? "katalog główny" : selectedPath)),
-                newFolderName,
-                newFolderButton
+                new HorizontalLayout(
+                        newFolderName,
+                        newFolderButton)
         );
-        newFileLayout.expand(chosenFolderLabel);
         return newFileLayout;
     }
 }
